@@ -1,0 +1,9 @@
+import { Bath, BedDouble, CalendarDays, Check, MapPin, Square, X } from 'lucide-react'
+import type { PropertyDetailsState } from '../hooks/usePropertyDetails'
+import { formatCurrency } from '../../property-search/model/properties'
+
+export function PropertyModal({ details }: { details: PropertyDetailsState }) {
+  const property = details.selected
+  if (!property) return null
+  return <div className="modal-backdrop" onClick={details.closeProperty}><article className="property-modal" onClick={(event) => event.stopPropagation()}><button className="modal-close" onClick={details.closeProperty}><X /></button><div className="modal-image"><img src={property.image} alt={property.title} /><span>{property.type}</span></div><div className="modal-content">{details.visitRequested ? <div className="visit-success"><span><Check size={30} /></span><h2>Viewing request sent.</h2><p>This is a frontend demo. No real appointment was created.</p><button onClick={() => details.setVisitRequested(false)}>Back to the property</button></div> : <><span className="property-location"><MapPin size={14} /> {property.area}, {property.location}</span><h2>{property.title}</h2><div className="modal-price">{formatCurrency(property.price)}</div><div className="property-specs"><span><BedDouble size={16} /> {property.beds} beds</span><span><Bath size={16} /> {property.baths} baths</span><span><Square size={15} /> {property.sqm} m²</span></div><p>A light-filled home with considered finishes, generous proportions and a quiet connection to its surroundings.</p><div className="mortgage-card"><span>Estimated monthly payment</span><strong>{formatCurrency(Math.round(property.price * 0.0037))}<small>/month</small></strong><small>Illustrative estimate based on a 30-year term.</small></div><button className="viewing-button" onClick={() => details.setVisitRequested(true)}><CalendarDays size={18} /> Request a viewing</button></>}</div></article></div>
+}
